@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "D:\\AndroidWorkSpace\\Course\\examples\\TinyDialer\\app\\build\\intermediates\\res\\merged\\debug\\drawable_icon.png.flat",
+        "source": "D:\\AndroidWorkSpace\\Course\\examples\\TinyDialer\\app\\src\\main\\res\\drawable\\icon.png"
+    },
+    {
+        "merged": "D:\\AndroidWorkSpace\\Course\\examples\\TinyDialer\\app\\build\\intermediates\\res\\merged\\debug\\layout_main.xml.flat",
+        "source": "D:\\AndroidWorkSpace\\Course\\examples\\TinyDialer\\app\\src\\main\\res\\layout\\main.xml"
+    }
+]

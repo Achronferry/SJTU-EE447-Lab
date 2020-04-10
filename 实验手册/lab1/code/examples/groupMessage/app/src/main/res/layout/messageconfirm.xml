@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<TextView
+	android:id="@+id/msgcnfrmtxtView"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:text="小样，你输入的信息是："
+/>
+<TextView
+	android:id="@+id/msgcnfrmText"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:gravity="center_vertical"
+	android:background="#FFFFFF"
+	android:padding="10dip"
+	android:textColor="#FF0000"
+	android:layout_below="@id/msgcnfrmtxtView"/>
+	
+/>
+<Button
+	android:id="@+id/msgcnfrm_cncl_btn"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_below="@id/msgcnfrmText" 
+    android:layout_alignParentRight="true" 
+    android:layout_marginTop="10dip"
+    android:layout_marginLeft="10dip"
+    android:text="取消"
+/>
+<Button
+	android:id="@+id/msgcnfrm_entr_btn"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="确定"
+	android:layout_toLeftOf="@id/msgcnfrm_cncl_btn" 
+    android:layout_alignTop="@id/msgcnfrm_cncl_btn"
+	/>
+
+</RelativeLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="button">拨号</string>
+    <string name="app_name">TinyDialer</string>
+    <string name="text">请输入电话号码</string>
+    <string name="phonenumber">13800138000</string>
+    <string name="notify_incorrect_phonenumber">您输入的号码不正确，请重新输入</string>
+</resources>

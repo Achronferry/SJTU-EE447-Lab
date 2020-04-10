@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<TextView  
+	android:id="@+id/txtView"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:textSize="24sp"
+    android:text="群发信息:"
+    />
+
+<EditText
+	android:id="@+id/groupMessageText"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_below="@id/txtView"
+	android:lines="5"
+	android:gravity="top"
+/>
+<Button
+	android:id="@+id/cncl_btn"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_below="@id/groupMessageText" 
+    android:layout_alignParentRight="true" 
+    android:layout_marginLeft="5dip"
+    android:text=" 取消  "
+/>
+<Button
+	android:id="@+id/entr_btn"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text=" 确定  "
+	android:layout_toLeftOf="@id/cncl_btn" 
+    android:layout_alignTop="@id/cncl_btn"
+	/>
+
+</RelativeLayout>
