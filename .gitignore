@@ -6,5 +6,5 @@
 *.log
 *.gz
 *.toc
-Repo*
+*/Repo*
 repo*
