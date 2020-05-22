@@ -1,0 +1,191 @@
+\documentclass[12pt]{report}
+\usepackage[a4paper]{geometry}
+\usepackage[myheadings]{fullpage}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx, wrapfig, subcaption, setspace, booktabs}
+\usepackage[T1]{fontenc}
+\usepackage[font=small, labelfont=bf]{caption}
+\usepackage{fourier}
+\usepackage[protrusion=true, expansion=true]{microtype}
+\usepackage[english]{babel}
+\usepackage{sectsty}
+\usepackage[colorlinks,linkcolor=black,urlcolor=blue]{hyperref}
+\usepackage{graphicx}
+
+\usepackage{ulem}
+
+\usepackage{xcolor}
+\usepackage{listings}
+
+\usepackage{setspace}
+\usepackage{indentfirst}
+\setlength{\parindent}{2em}
+
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\renewcommand\thesection{\arabic{section}}
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  language=Python,                % the language of the code
+  basicstyle=\footnotesize,           % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=2,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+
+%-------------------------------------------------------------------------------
+% HEADER & FOOTER
+%-------------------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\setlength\headheight{15pt}
+\fancyhead[L]{Name:Chenyu Yang}
+\fancyhead[R]{Student ID: 517030910386}
+\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
+%-------------------------------------------------------------------------------
+% TITLE PAGE
+%-------------------------------------------------------------------------------
+
+\begin{document}
+
+\title{ \normalsize \textsc{Lab 4}
+        \\ [2.0cm]
+        \HRule{0.5pt} \\
+        \LARGE \textbf{\uppercase{Mining Advisor-advisee Relationships}}
+        \HRule{2pt} \\ [0.5cm]
+        \normalsize \today \vspace*{5\baselineskip}}
+
+\date{}
+
+\author{
+        Name:Chenyu Yang \\
+        Student ID: 517030910386 \\ 
+        Class: F1703015 }
+
+\maketitle
+\tableofcontents
+\newpage
+
+\sectionfont{\scshape}
+%-------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+% BODY
+%-------------------------------------------------------------------------------
+
+\section{Introduction}
+This Lab focuses on learning basic machine learning methods and implementing them on a specific topic, to find advisor-advisee relationships in academic heterogeneous networks. In this Lab, you will learn some machine learning tools and realize your own model based on Python and Sklearn. Moreover, you will use Keras and Tensorflow to build a deep-learning model and compare the performance between deep learning and traditional machine learning methods.
+\section{Background}
+\subsection{Keras}
+Keras is a high-level neural networks API, written in Python and capable of running on top of TensorFlow, CNTK, or Theano. It was developed with a focus on enabling fast experimentation. Being able to go from idea to result with the least possible delay is key to doing good research.
+
+Keras has the following advantages:
+
+\begin{spacing}{0.2}
+\begin{itemize}
+	\item Allows for easy and fast prototyping (through user friendliness, modularity, and extensibility).
+	\item Supports both convolutional networks and recurrent networks, as well as combinations of the two.
+	\item Runs seamlessly on CPU and GPU.
+\end{itemize}
+\end{spacing}
+
+\subsection{Dataset}
+In this experiment, we have the known (GroundTruth) Advisor-advisee Relationships (AARs) and common coauthor relationships, which are obtained through calculating the probability of being an AAR respectively. The authors are represented by eight 4-bit code.
+
+Features have been extracted in the perspective of relationship before, in and outside one cooperation. For instance, if we have known A cooperated with B in paper publication from 2008, then the more paper A has before 2008 than B, the more likely that A is Advisor and B is Advisee in their cooperation. We have 22 ordered features ranked through Mutual Information Correlations, method of feature engineering (realized in Python sklearn).
+\section{Procedure}
+\subsection{Deep Neural Network}
+Firstly, we test a deep neural network. Deep neural network(DNN) is based on gradient update. The forward calculation tries to get a label $\hat{y}$ according to features $X$ while the backword propagation update parameters in model based on the error between $\hat{y}$ and ground truth $y$.
+
+In this experiment, we use a simple 2-layer perceptron with a nonlinear activation 'sigmoid'. We use a softmax function to get the final probability for classification.
+
+\begin{lstlisting}
+model = Sequential()
+model.add(Dense(5, input_shape = (shape_in,))) #input scale 
+model.add(Activation('sigmoid'))
+model.add(Dense(2)) #output scale
+model.add(Activation('softmax'))
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.fit(X_train, y_train, nb_epoch=5, batch_size=5, verbose=1)
+\end{lstlisting}
+\subsection{Support Vector Machine}
+Support vector machine (SVM) is a two classification model. Its basic model is a linear classifier with the largest interval defined in the feature space, which makes it different from the perceptron. SVM also includes kernel techniques, which makes it a non-linear classifier in essence. The learning strategy of SVM is to maximize the interval, which can be formalized as a problem of solving convex quadratic programming, and also equivalent to the problem of minimizing the regularized hinge loss function. The learning algorithm of SVM is the optimization algorithm for convex quadratic programming.
+
+We scaled the dataset to make the model more convergent and tried different kernels for SVM.
+\begin{lstlisting}
+scaler=StandardScaler().fit(X_train)
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
+model = SVC(kernel = "rbf")
+model.fit(X_train, y_train)
+\end{lstlisting}
+\subsection{Decision Tree}
+Decision tree is a decision analysis method which can get the probability that the expected value of NPV is greater than or equal to zero, evaluate the project risk and judge its feasibility by constructing decision tree on the basis of knowing the probability of occurrence of various situations. 
+
+Decision tree is a very common classification method. It is a kind of regulatory learning. The so-called regulatory learning is to give a group of samples, each of which has a set of attributes and a category. These categories are determined in advance. Then a classifier can be obtained by learning, which can give correct classification to the new objects. Such machine learning is called supervised learning.
+\begin{lstlisting}
+model = tree.DecisionTreeClassifier(min_samples_split = 40)
+model.fit(X_train,y_train)
+\end{lstlisting}
+\section{Result}
+For the DNN, we use \textbf{\textit{Adam}} as the optimizer and \textbf{\textit{cross entropy}} as the loss fuction. We trained the model for 5 epoches and the batch size is set to 5.
+
+For SVM, we adapted 2 different kernels: \textbf{\textit{rbf}} and \textbf{\textit{linear}}. And before fitting the model we scale the dataset using \textit{\textbf{StandardScaler}}.
+
+For decision tree, we set the \textbf{\textit{min\_samples\_split}} to 40. This model doesn't need the dataset been scaled.
+
+
+\begin{table}[!htbp]
+	\centering
+	\begin{tabular}{cccc}
+		\toprule
+		Model & Loss & Accuracy & Time \\
+		\midrule
+		DNN & 16.88 & 94.57 & 42.18 \\
+		SVM(linear) & - & 94.12 & 4.26 \\
+		SVM(rbf) & - & 94.13 & 2.44 \\
+		DTree & - & 94.52 & 0.39 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Results for different models}
+	\label{fig:1}
+\end{table}
+
+As the table shows, for this lab, DNN and Decision Tree performs better than SVM. but DNN takes long time to train. Decision tree is the fastest model of them all.
+
+\section{Conclusion}
+In this lab, we used different models to predict the adviser-advisee relationships, which makes me know more about machine learning.
+\section{Complete Code}
+\noindent\url{https://github.com/Achronferry/SJTU-EE447-Lab/tree/master}
+
+\end{document}
+

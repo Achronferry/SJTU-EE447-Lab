@@ -1,4 +1,3 @@
-*.tex
 *.png
 *.jpg
 *.jpeg
@@ -6,5 +5,4 @@
 *.log
 *.gz
 *.toc
-*/Repo*
-repo*
+*.out

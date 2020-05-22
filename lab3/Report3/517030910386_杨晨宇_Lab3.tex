@@ -1,0 +1,223 @@
+\documentclass[12pt]{report}
+\usepackage[a4paper]{geometry}
+\usepackage[myheadings]{fullpage}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx, wrapfig, subcaption, setspace, booktabs}
+\usepackage[T1]{fontenc}
+\usepackage[font=small, labelfont=bf]{caption}
+\usepackage{fourier}
+\usepackage[protrusion=true, expansion=true]{microtype}
+\usepackage[english]{babel}
+\usepackage{sectsty}
+\usepackage[colorlinks,linkcolor=black,urlcolor=blue]{hyperref}
+\usepackage{graphicx}
+
+\usepackage{ulem}
+
+\usepackage{xcolor}
+\usepackage{listings}
+
+\usepackage{setspace}
+\usepackage{indentfirst}
+\setlength{\parindent}{2em}
+
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\renewcommand\thesection{\arabic{section}}
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  language=Java,                % the language of the code
+  basicstyle=\footnotesize,           % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=2,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+
+%-------------------------------------------------------------------------------
+% HEADER & FOOTER
+%-------------------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\setlength\headheight{15pt}
+\fancyhead[L]{Name:Chenyu Yang}
+\fancyhead[R]{Student ID: 517030910386}
+\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
+%-------------------------------------------------------------------------------
+% TITLE PAGE
+%-------------------------------------------------------------------------------
+
+\begin{document}
+
+\title{ \normalsize \textsc{Lab 3}
+        \\ [2.0cm]
+        \HRule{0.5pt} \\
+        \LARGE \textbf{\uppercase{QR Code}}
+        \HRule{2pt} \\ [0.5cm]
+        \normalsize \today \vspace*{5\baselineskip}}
+
+\date{}
+
+\author{
+        Name:Chenyu Yang \\
+        Student ID: 517030910386 \\ 
+        Class: F1703015 }
+
+\maketitle
+\tableofcontents
+\newpage
+
+\sectionfont{\scshape}
+%-------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+% BODY
+%-------------------------------------------------------------------------------
+
+\section{Introduction}
+\subsection{Bachground}
+A barcode is an optical machine-readable representation of data relating to the object to which it is attached. Barcodes originally were scanned by special optical scanners called barcode readers. Later applications software became available for devices that could read images, such as smartphones with cameras.
+
+Nowadays the most applied barcode is QR code (abbreviated from Quick Response Code), integrated in applications like 
+Wechat, Paypal, Alipay etc. A QR code consists of black modules (square dots) 
+arranged in a square grid on a white background, which can be read by an imaging 
+device (such as a camera, scanner, etc.) and processed using Reed-Solomon error 
+correction until the image can be appropriately interpreted. The required data are then 
+extracted from patterns that are present in both horizontal and vertical components of the 
+image.
+\subsection{Environment}
+\begin{enumerate}
+	\item OpenJDK 64-bit;
+	\item Android 9.0 (pie);
+	\item Android Studio 3.3.2;
+	\item MI 6; (for test)
+\end{enumerate}
+
+\section{Procedure}
+\subsection{Preparation}
+The Project fails building at first with infomation  \textbf{\textit{java.lang.illegalstateexception: failed to find target with hash string 'android-21'}}. I reviews the \textit{build.gradle} file, which contains the required SDK information of this project.
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=0.4\linewidth]{1}
+	\caption{build.gradle}
+	\label{fig:1}
+\end{figure}
+
+As it shows, the project requires SDK version 21 and our default setting is ver.26. After installing Android SDK ver.21 by following the notice of Android Studio, it works successfully.
+\subsection{Encoder}
+In this part, we translate the string into a QR code. The details are a little complicated but to realize it is rather easy. The class \textit{MultiFormatWriter} can be directly used to translate it into a matrix. Each element of this matrix corresponds to a region in the QR code. And we just need to paint some certain region to black.
+\begin{lstlisting}
+	String contentString = textContent.getText().toString();
+	if (!contentString.equals("")) {
+		BitMatrix matrix = new MultiFormatWriter().encode(contentString,
+		BarcodeFormat.QR_CODE, 300, 300);
+		int width = matrix.getWidth();
+		int height = matrix.getHeight();
+		int[] pixels = new int[width * height];
+		
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (matrix.get(x, y)) 
+					pixels[y * width + x] = Color.BLACK;
+			}
+		}
+		/*
+		 ......
+		*/
+	}
+\end{lstlisting}
+\subsection{Decoder}
+The decoder needs to firstly open the camera, then to check each flame until finding a QR code. Finally it change the code to a string back. The usage of camera is a keypoint, however, it's not related to this project. So we only discuss the process from QR code to string. As it shown below, we mainly use three classes: \textit{PlanarYUVLuminanceSource} \textit{HybridBinarizer} and \textit{QRCodeReader}.
+
+\begin{enumerate}
+	\item \textit{PlanarYUVLuminanceSource} is to abstract the bitmaps on different platforms and realize a standard interface for requesting the brightness value of gray level. 
+	\item \textit{HybridBinarizer} provides a set of methods for converting luminance data into one bit data. It can only receives a PlanarYUVLuminanceSource object.
+	\item \textit{QRCodeReader} Finally, we use \textit{QRCodeReader.decode()} to translate the bitmap back to the string.   
+\end{enumerate}
+
+At last, we stop the camera and put the string we get on the screen.
+\begin{lstlisting}
+	PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(
+	data, previewWidth, previewHeight, 0, 0, previewWidth,
+	previewHeight, false);
+	BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+	Reader reader = new QRCodeReader();
+
+	try {
+		Result result = reader.decode(bitmap);
+		String text = result.getText();
+		
+		Intent intent = new Intent();
+		Bundle bundle = new Bundle();
+		bundle.putString("result", result.toString());
+		intent.putExtras(bundle);
+		setResult(RESULT_OK, intent);
+		finish();
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	/*
+	......
+	*/
+\end{lstlisting}
+\newpage
+\section{Result}
+\subsection{Encoder}
+\begin{figure*}[!htbp]
+	\begin{minipage}{0.5\textwidth} 
+	\centering
+	\includegraphics[width=0.9\linewidth]{2}
+	\caption{Input string}
+	\label{fig:2}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.5\textwidth} 
+	\centering
+	\includegraphics[width=0.9\linewidth]{3}
+	\caption{QR code}
+	\label{fig:3}
+	\end{minipage}
+\end{figure*}
+
+\newpage
+\subsection{Decoder}
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=0.45\linewidth]{4}
+	\caption{Decoder result}
+	\label{fig:4}
+\end{figure}
+
+\section{Complete Code}
+\noindent\url{https://github.com/Achronferry/SJTU-EE447-Lab/tree/master}
+
+
+\end{document}
+

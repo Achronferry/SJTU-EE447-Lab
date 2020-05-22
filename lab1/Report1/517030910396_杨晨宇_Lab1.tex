@@ -1,0 +1,259 @@
+\documentclass[12pt]{report}
+\usepackage[a4paper]{geometry}
+\usepackage[myheadings]{fullpage}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx, wrapfig, subcaption, setspace, booktabs}
+\usepackage[T1]{fontenc}
+\usepackage[font=small, labelfont=bf]{caption}
+\usepackage{fourier}
+\usepackage[protrusion=true, expansion=true]{microtype}
+\usepackage[english]{babel}
+\usepackage{sectsty}
+
+\usepackage{graphicx}
+
+\usepackage{ulem}
+
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[colorlinks,linkcolor=black,urlcolor=blue]{hyperref}
+
+\usepackage{setspace}
+\usepackage{indentfirst}
+\setlength{\parindent}{2em}
+
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\renewcommand\thesection{\arabic{section}}
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  language=Java,                % the language of the code
+  basicstyle=\footnotesize,           % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=2,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+
+%-------------------------------------------------------------------------------
+% HEADER & FOOTER
+%-------------------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\setlength\headheight{15pt}
+\fancyhead[L]{Name:Chenyu Yang}
+\fancyhead[R]{Student ID: 517030910386}
+\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
+%-------------------------------------------------------------------------------
+% TITLE PAGE
+%-------------------------------------------------------------------------------
+
+\begin{document}
+
+\title{ \normalsize \textsc{Lab 1}
+        \\ [2.0cm]
+        \HRule{0.5pt} \\
+        \LARGE \textbf{\uppercase{DrawLineSample}}
+        \HRule{2pt} \\ [0.5cm]
+        \normalsize \today \vspace*{5\baselineskip}}
+
+\date{}
+
+\author{
+        Name:Chenyu Yang \\
+        Student ID: 517030910386 \\ 
+        Class: F1703015 }
+
+\maketitle
+\tableofcontents
+\newpage
+
+\sectionfont{\scshape}
+%-------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+% BODY
+%-------------------------------------------------------------------------------
+
+\section{Introduction}
+\subsection{Requirement}
+In this project, we will learn the development of Android applications. We firstly need to show "Hello World!" in the User Interface. Then we will implement a drawing application in which we can draw lines in the screen.
+\subsection{Environment}
+\begin{enumerate}
+	\item OpenJDK 64-bit;
+	\item Android 9.0 (pie);
+	\item Android Studio 3.3.2;
+	\item MI 6; (for test)
+\end{enumerate}
+\section{Related Knowledge}
+\subsection{Listener}
+istener is one of the most common way to get movements applied to a button. Compared with OnClick function, it has higher priority and can handle different actions. A listener is an object that is specially used to monitor and process the events or state changes of other objects. When events happens, corresponding actions are taken immediately.
+\subsection{Canvas}
+The Canvas class holds the "draw" calls. To draw something, it needs 4 basic components: a Bitmap to hold the pixels, a canvas to hold the draw calls (written into the bitmap), a drawing primitive (eg: Rect, Path, Text, Bitmap) and a paint to describe the color and style for the drawing.
+\section{Procedure}
+\subsection{Print 'Hello World!'}
+The first task is to print 'Hello World!' in the screen. This task is rather easy and without intraction with users. So we can accomplish it just in the \textit{.xml} files, which takes charge of the UI design. We create a TextView in the center of the screen with the string we need to show. (Also, we can put the string in \textit{values/strings.xml}.)
+
+\begin{lstlisting}{activity_main.xml}
+<TextView
+	android:id="@+id/hello"
+	android:layout_width="241dp"
+	android:layout_height="58dp"
+	android:layout_marginTop="8dp"
+	android:layout_marginBottom="8dp"
+	android:gravity="center"
+	android:text="Hello World!"
+	android:textAllCaps="true"
+	android:textSize="24sp"
+	android:textStyle="bold"
+	app:layout_constraintBottom_toBottomOf="parent"
+	app:layout_constraintEnd_toEndOf="parent"
+	app:layout_constraintHorizontal_bias="0.5"
+	app:layout_constraintStart_toStartOf="parent"
+	app:layout_constraintTop_toTopOf="parent" />
+\end{lstlisting}
+
+Considering the \textit{.xml} file has realized the function we need, the \textit{Activity\_main.java} only works to create the page based on \textit{Activity\_main.xml}. And it includes an OnClick function which starts the second activity.
+\begin{lstlisting}{Activity_main.java}
+public class MainActivity extends AppCompatActivity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+	}
+	
+	//Jump to the next activity
+	public void ClickToStart(View view) {
+		Intent intent = new Intent(this, DrawLineSample.class);
+		startActivity(intent);
+	};
+};
+\end{lstlisting}
+\subsection{Draw A Line}
+The second task is more challenging, which requires us to design a drawing application. This task can be seperated into two parts. The first is to monitor the user's touch action while the second is drawing in the screen.
+
+For the former, we can use an OnTouchListener to get the user's action and touch location reletive to the screen. When the user touch the screen, it draws a point at current position, while it draw a line from the previous position to the current when the screen is dragged. Every time the event has been handled, it will record the new location for the next action. The function returns \textit{True}, which means this event has been handled and will not be passed to other handlers.
+
+For drawing, we initialize the background bitmap, paint and the canvas in \textit{oncreate()} function. Every time we draw on the background bitmap and pass it to the ImageView. Of course we can reset the background and style of paint.(details are in \$4.2)
+
+\begin{lstlisting}{activity_draw.java}
+@SuppressLint("ClickableViewAccessibility")
+public class DrawLineSample extends AppCompatActivity {
+	Intent intent = getIntent(); //get from the old activity
+	
+	private ImageView scr;
+	private Canvas canvas;
+	private Paint p;
+	private Bitmap bitmap;
+	private DisplayMetrics dm;
+	private float[] prev_pos;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_draw);
+		
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm); // get the screen size
+		prev_pos = new float[2];
+	
+		p = new Paint();
+		p.setColor(Color.BLACK);              //set the color 
+		p.setAntiAlias(true);                //set anti-alias, always true
+		p.setStrokeCap(Paint.Cap.ROUND);     //set the type of linr
+		p.setStrokeWidth(8);                //set the width of line
+		
+		canvas = new Canvas();
+		bitmap = Bitmap.createBitmap(screen_size[0], screen_size[1], Bitmap.Config.ARGB_8888);
+		canvas.setBitmap(bitmap);
+		
+		scr = findViewById(R.id.draw_layer);
+		scr.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				float x = event.getX();   //record the current location
+				float y = event.getY();
+				if (event.getAction() == MotionEvent.ACTION_MOVE) {    
+					canvas.drawLine(x,y,prev_pos[0],prev_pos[1],p);
+				}
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {    
+					canvas.drawPoint(x, y, p);
+				}
+				if (event.getAction() == MotionEvent.ACTION_UP) { }
+				//Update the old location and the image;
+				prev_pos[0] = x;
+				prev_pos[1] = y;
+				scr.setImageBitmap(bitmap);
+				return true;
+			}
+		});
+	}
+// ......
+// More fuctions
+// ......
+}
+\end{lstlisting}
+
+\begin{lstlisting}{activity_draw.xml}
+    <ImageView
+	android:id="@+id/draw_layer"
+	android:layout_width="0dp"
+	android:layout_height="0dp"
+	app:layout_constraintBottom_toBottomOf="parent"
+	app:layout_constraintEnd_toEndOf="parent"
+	app:layout_constraintHorizontal_bias="1.0"
+	app:layout_constraintStart_toStartOf="parent"
+	app:layout_constraintTop_toTopOf="parent"
+	app:layout_constraintVertical_bias="0.0" />
+
+	<Button // clear screen
+	... />
+	<ImageButton // change color
+	... />
+\end{lstlisting}
+
+\section{Result}
+\subsection{Print 'Hello World!'}
+\noindent\includegraphics[scale=0.21]{layer1.png}\\
+\subsection{Draw A Line}
+\noindent\includegraphics[scale=0.21]{layer2.png}
+
+\section{Conclusion}
+In this lab, I learned how to use Android Studio to design a simple mobile application and the usage of Canvas and Lsteners.
+
+\section{Complete Code}
+\noindent\url{https://github.com/Achronferry/SJTU-EE447-Lab/tree/master/lab1}
+
+
+
+
+\end{document}
+

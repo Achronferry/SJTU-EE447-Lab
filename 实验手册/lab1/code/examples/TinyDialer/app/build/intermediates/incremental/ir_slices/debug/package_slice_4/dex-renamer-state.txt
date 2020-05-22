@@ -1,4 +1,0 @@
-#Mon Mar 25 12:20:22 CST 2019
-base.0=D\:\\AndroidWorkSpace\\Course\\examples\\TinyDialer\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\4
-path.0=classes.dex
-renamed.0=classes.dex
